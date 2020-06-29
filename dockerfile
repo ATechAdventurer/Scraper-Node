@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-node
+FROM balenalib/raspberrypi3-node
 RUN  apt-get update \
      && apt-get install -y wget gnupg ca-certificates \
      && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
