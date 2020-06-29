@@ -15,9 +15,6 @@
     "puppeteer": "^4.0.1",
     "unirest": "^0.6.0"
   },
-  "engines": {
-    "node": "11.15.0"
-  },
   "devDependencies": {
     "dotenv": "^8.2.0"
   }
