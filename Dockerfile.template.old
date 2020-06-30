@@ -1,0 +1,16 @@
+FROM balenalib/raspberrypi3-node
+RUN  apt-get update \
+     && apt-get install -y wget gnupg ca-certificates \
+     && apt-get update \
+     && apt-get install -y chromium-browser git build-essential \
+     && rm -rf /var/lib/apt/lists/* \
+     && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
+     && chmod +x /usr/sbin/wait-for-it.sh
+
+WORKDIR /usr/src/app
+COPY ./ ./
+RUN export IS_DOCKER=true
+RUN export NO_SANDBOX=true
+RUN npm install
+RUN npm start
+CMD tail -f /dev/null

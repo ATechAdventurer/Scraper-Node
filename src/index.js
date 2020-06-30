@@ -6,7 +6,10 @@ const { HASHTAG, SCRAPE_TOTAL, SAVE_PATH, MOTHERSHIP_URL } = process.env;
 const hashtagSearch = createApi("hashtag", HASHTAG, {
     total: SCRAPE_TOTAL,
     fullAPI: true,
-    hibernationTime: 3
+    hibernationTime: 3,
+    headless: true,
+    executablePath: "/usr/bin/chromium-browser"
+    
 });
 
 (async () => {
