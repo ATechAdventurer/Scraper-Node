@@ -167,7 +167,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-    const { tag = null, count = null } = req.body;
+    const { tag = null, count = 100 } = req.body;
+    if(tag == null || count == null){
+        return res.redirect("/");
+    }
+    if(tag.includes("#")){
+        tag = tag.replace("#", "");
+    }
     jobs.push({ tag, count, status: 'waiting' });
     addJob(tag, count);
     res.redirect("/");
