@@ -5,7 +5,41 @@ let app = express();
 app.use(express.urlencoded())
 var io = require('socket.io')(3000);
 
-let jobs = [{ tag: "test", count: 1, status: 'waiting' }, { tag: "eco", count: 15, status: 'waiting' }, { tag: "economy", count: 15, status: 'waiting' }];
+const jobsList = [
+    { tag: "airpollution", count: 500, status: 'waiting' },
+    { tag: "climate", count: 500, status: 'waiting' },
+    { tag: "extinctionrebellion", count: 500, status: 'waiting' },
+    { tag: "climateaction", count: 500, status: 'waiting' },
+    { tag: "climatechange", count: 500, status: 'waiting' },
+    { tag: "plasticpollution", count: 500, status: 'waiting' },
+    { tag: "climatecrisis", count: 500, status: 'waiting' },
+    { tag: "climateemergency", count: 500, status: 'waiting' },
+    { tag: "covid19", count: 500, status: 'waiting' },
+    { tag: "ecofriendly", count: 500, status: 'waiting' },
+    { tag: "ecology", count: 500, status: 'waiting' },
+    { tag: "ecosystem", count: 500, status: 'waiting' },
+    { tag: "environment", count: 500, status: 'waiting' },
+    { tag: "environment", count: 500, status: 'waiting' },
+    { tag: "environmental", count: 500, status: 'waiting' },
+    { tag: "environmentalism", count: 500, status: 'waiting' },
+    { tag: "environmentaljustice", count: 500, status: 'waiting' },
+    { tag: "environmentallyfriendly", count: 500, status: 'waiting' },
+    { tag: "extintionrebellion", count: 500, status: 'waiting' },
+    { tag: "globalclimatestrike", count: 500, status: 'waiting' },
+    { tag: "globalwarming", count: 500, status: 'waiting' },
+    { tag: "plasticfreejuly2020", count: 500, status: 'waiting' },
+    { tag: "pollution", count: 500, status: 'waiting' },
+    { tag: "protectourplanet", count: 500, status: 'waiting' },
+    { tag: "reducereuserecycle", count: 500, status: 'waiting' },
+    { tag: "reducewaste", count: 500, status: 'waiting' },
+    { tag: "savetheearth", count: 500, status: 'waiting' },
+    { tag: "savetheplanet", count: 500, status: 'waiting' },
+    { tag: "sustainable", count: 500, status: 'waiting' },
+    { tag: "sustainableliving", count: 500, status: 'waiting' }
+];
+
+let jobs = jobsList;
+let jobCount = jobs.length;
 let clients = {};
 io.on('connection', (socket) => {
     console.log("Client has joined");
@@ -33,6 +67,7 @@ io.on('connection', (socket) => {
 
     socket.on('clockout', (data) => {
         console.log("Client sent over job data", data);
+        jobCount--;
         finishJob(socket.id, data);
         let selectedJob = grabJob();
         if (selectedJob != null) {
@@ -41,6 +76,10 @@ io.on('connection', (socket) => {
             socket.emit('employment', selectedJob);
         }
         clients[socket.id].status = 'idle';
+        if (jobCount <= 0) {
+            jobs.push(...jobsList);
+            jobCount = jobsList.length;
+        }
     });
 
     socket.on('pester', () => {
@@ -89,7 +128,7 @@ function finishJob(id, data) {
         job.status = 'finished';
     });
     // TODO: Solve this more gracefully
-    if (jobs.length > 25) {
+    if (jobs.length > 150) {
         jobs = jobs.filter((job) => {
             return job.status == 'finished';
         })
@@ -168,10 +207,10 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     const { tag = null, count = 100 } = req.body;
-    if(tag == null || count == null){
+    if (tag == null || count == null) {
         return res.redirect("/");
     }
-    if(tag.includes("#")){
+    if (tag.includes("#")) {
         tag = tag.replace("#", "");
     }
     jobs.push({ tag, count, status: 'waiting' });
@@ -179,4 +218,4 @@ app.post("/", (req, res) => {
     res.redirect("/");
 })
 
-app.listen(process.env.PORT || 80);
+app.listen(process.env.PORT || 8123);
