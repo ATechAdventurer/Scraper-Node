@@ -194,9 +194,8 @@ app.get("/", (req, res) => {
         }
             </ol>
             <form action="/" method="POST">
-                <input type="text" name="tag" />
-                <input type="text" name="count" />
-                <button type="submit">Submit</button>
+            
+                <button type="submit">Run Again</button>
             </form>
         </body>
     </html>
@@ -206,15 +205,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-    const { tag = null, count = 100 } = req.body;
-    if (tag == null || count == null) {
-        return res.redirect("/");
-    }
-    if (tag.includes("#")) {
-        tag = tag.replace("#", "");
-    }
-    jobs.push({ tag, count, status: 'waiting' });
-    addJob(tag, count);
+    jobs.push(...jobsList);
+    addJob(jobsList[0].tag, jobsList[0].count);
     res.redirect("/");
 })
 
